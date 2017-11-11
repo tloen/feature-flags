@@ -1,12 +1,27 @@
 var express = require("express");
-var router = express.Router();
+
+// sub-applciation allows use of templating engine
+var router = express();
+var { Feature, Environment } = require("../database/schemata");
 
 const envPage = require("./environment");
+
+router.set("view engine", "pug");
+router.set("views", "app/views");
 
 router.get("/:environment", envPage);
 
 router.get("/", (req, res) => {
-  return res.send("main page not implemented");
+  Environment.getNames().then(
+    names => {
+      return res.render("main", { names });
+    },
+    err => {
+      console.log(err);
+      res.status(500);
+      return res.send("An error occurred.");
+    }
+  );
 });
 
 module.exports = router;

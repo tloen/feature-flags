@@ -1,8 +1,11 @@
 const express = require("express");
+const connectDatabase = require("./database/connect");
 const app = express();
 
 const api = (req, res) => {}; //require("./api");
 const frontend = require("./app");
+
+connectDatabase();
 
 const port = 3000;
 

@@ -1,0 +1,14 @@
+html
+  head
+    title="Main page"
+  body
+    h1 Feature flag console
+    p
+      | This page allows development teams to toggle features on different
+      | environments. Select an environment below to toggle its features,
+      | or add a new namespace/feature below.
+    h2 Environments:
+    ul
+      each name in names
+        li
+          a(href=`app/${name}`) #{name}

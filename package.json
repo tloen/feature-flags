@@ -18,6 +18,7 @@
   "homepage": "https://github.com/tloen/feature-flags#readme",
   "dependencies": {
     "express": "^4.16.2",
+    "lodash": "^4.17.4",
     "mongoose": "^4.13.1",
     "pug": "^2.0.0-rc.4"
   }
