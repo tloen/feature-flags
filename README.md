@@ -30,12 +30,14 @@ The following API endpoints would exist if I were rendering the page client-side
 * GET /api/environments/ENVIRONMENT_ID/ - will return all features of a given environment
 
 The following endpoints still need to exist:
-* POST /api/features/FEATURE_NAME - creates feature
+* POST /api/features/FEATURE_NAME - creates feature.
+* POST /api/namespaces/NAMESPACE_NAME - creates namespace with given name.
+* POST /api/namespaces/NAMESPACE_NAME/features/FEATURE_NAME - creates feature within namespace.
 * PUT /api/features/FEATURE_NAME/environment/ENVIRONMENT_NAME - toggles feature with name. Has issues. Change as soon as possible.
 
 The response from both of these endpoints should be a 200 and a refreshing of the client.
 
 ## The Data Model
 
-I'll be the first to admit that I'm not that great with relational databases. I'm going to save the exact data model for last; I *know* that relational databases are the the ideal tool for this, but if I run out of time I can just use MongoDB.
+I have a strong sense that relational databases are the best tool for this data, as there's no doubt that it's heavily relational. However, my SQL's a bit rusty, so I'll go with MongoDB and (regrettably) sacrifice model simplicity for development speed.
 
