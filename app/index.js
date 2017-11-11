@@ -4,6 +4,16 @@ var express = require("express");
 var router = express();
 var { Feature, Environment } = require("../database/schemata");
 
+// initial generation of environments
+/*
+for (x of ["development", "integration", "staging", "production"]) {
+  new Environment({
+    name: x,
+    featureValues: {}
+  }).save();
+}
+*/
+
 const envPage = require("./environment");
 
 router.set("view engine", "pug");
@@ -12,9 +22,9 @@ router.set("views", "app/views");
 router.get("/:environment", envPage);
 
 router.get("/", (req, res) => {
-  Environment.getNames().then(
-    names => {
-      return res.render("main", { names });
+  Promise.all([Environment.getNames(), Feature.getAll()]).then(
+    ([names, features]) => {
+      return res.render("main", { names, features });
     },
     err => {
       console.log(err);

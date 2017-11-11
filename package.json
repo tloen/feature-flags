@@ -17,9 +17,11 @@
   },
   "homepage": "https://github.com/tloen/feature-flags#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "lodash": "^4.17.4",
     "mongoose": "^4.13.1",
+    "mongoose-unique-validator": "^1.0.6",
     "pug": "^2.0.0-rc.4"
   }
 }

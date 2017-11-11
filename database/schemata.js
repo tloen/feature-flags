@@ -1,16 +1,25 @@
 const mongoose = require("mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
 const { Schema } = mongoose;
 const { Mixed, ObjectId } = Schema.Types;
 
 // feature UNION namespace
 const featureSchema = new Schema({
-  _id: String, // name of feature
+  name: {
+    type: String, // name of feature
+    required: true,
+    unique: true
+  },
   type: String // 'atomic' | 'namespace'
 });
 
 // environment
 const environmentSchema = new Schema({
-  _id: String, // name of environment
+  name: {
+    type: String,
+    required: true,
+    unique: true
+  }, // name of environment
   featureValues: Mixed // key-val pair of feature enabled/disabled
 });
 
@@ -25,7 +34,7 @@ environmentSchema.statics.findByName = function(name) {
 environmentSchema.statics.getNames = function(name) {
   return this.find({}).then(
     envs => {
-      return envs.map(x => x._id);
+      return envs.map(x => x.name);
     },
     err => {
       console.log(err);

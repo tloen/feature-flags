@@ -12,3 +12,12 @@ html
       each name in names
         li
           a(href=`app/${name}`) #{name}
+    h2 Features:
+    ul
+      each feature in features
+        li #{feature.name}
+    h3 Add new features:
+    form(method='post' action='/api/features')
+      label(for='feature-name')='Feature name: '
+      input(type='text' name='featureName')
+      input(type='submit' value='Add new feature')
