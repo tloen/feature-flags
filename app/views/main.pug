@@ -1,6 +1,8 @@
 html
   head
     title="Main page"
+    style
+      | * {font-family: "Helvetica", Arial, Times New Roman}
   body
     h1 Feature flag console
     p
@@ -15,9 +17,29 @@ html
     h2 Features:
     ul
       each feature in features
-        li #{feature.name}
-    h3 Add new features:
-    form(method='post' action='/api/features')
-      label(for='feature-name')='Feature name: '
+        if feature.type == 'atomic'
+          li #{feature.name}
+        else if feature.type == 'namespace'
+          li #{'NAMESPACE: ' + feature.name}
+            ul
+              each entry in feature.entries
+                li #{feature.name + '.' + entry}
+    h3 Add new feature:
+    form(method='post' action='/api/features' id='new-feature')
+      label(for='featureName')='Feature name: '
       input(type='text' name='featureName')
+      br
+      label(for='namespace')="In namespace: "
+      select(name='namespace' form='new-feature')
+        option(value=NULL) (none)
+        each feature in features
+          if feature.type == 'namespace'
+            option(value=feature.name) #{feature.name}
+      br
       input(type='submit' value='Add new feature')
+
+    h3 Add new namespace:
+    form(method='post' action='/api/namespaces')
+      label(for='namespaceName')='Namespace name: '
+      input(type='text' name='namespaceName')
+      input(type='submit' value='Add new namespace')

@@ -10,7 +10,8 @@ const featureSchema = new Schema({
     required: true,
     unique: true
   },
-  type: String // 'atomic' | 'namespace'
+  type: String, // 'atomic' | 'namespace'
+  entries: [String]
 });
 
 // environment
@@ -24,11 +25,11 @@ const environmentSchema = new Schema({
 });
 
 featureSchema.statics.findByName = function(name) {
-  return this.findById({ _id, name });
+  return this.findOne({ name });
 };
 
 environmentSchema.statics.findByName = function(name) {
-  return this.findById({ _id, name });
+  return this.findOne({ name });
 };
 
 environmentSchema.statics.getNames = function(name) {

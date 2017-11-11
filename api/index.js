@@ -10,6 +10,8 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 router.use("/features", features);
+router.use("/namespaces", namespaces);
+router.use("/environments", environments);
 
 router.get("/", (req, res) => {
   res.json({
