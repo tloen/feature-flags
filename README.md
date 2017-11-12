@@ -56,3 +56,5 @@ I use three collections---`logs`, `features`, and `environments`---to store my d
 Don't make a namespace called `(none)`.
 
 Double-clicks toggle twice, resulting in no apparent change on the client side
+
+Database credentials should never be hard-coded
