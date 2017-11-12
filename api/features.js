@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var { Feature, Log } = require("../database/schemata");
 
+// create new feature
 router.post("/", (req, res) => {
   const updateAndSend = function(feature) {
     return feature.save().then(

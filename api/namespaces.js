@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var { Feature } = require("../database/schemata");
 
+// create new namespace
 router.post("/", (req, res) => {
   const { namespaceName: name } = req.body;
   if (name.includes(".")) return res.send("name cannot include a period.");

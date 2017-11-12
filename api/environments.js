@@ -3,6 +3,7 @@ var router = express.Router();
 
 var { Environment, Feature, Log } = require("../database/schemata");
 
+// toggles single feature
 router.post("/:environmentName/feature/:featureName", (req, res) => {
   const { environmentName, featureName } = req.params;
   Promise.all([
@@ -45,6 +46,7 @@ router.post("/:environmentName/feature/:featureName", (req, res) => {
   );
 });
 
+// sets all features in namespace
 router.post(
   "/:environmentName/namespace/:namespaceName/feature/:featureName",
   (req, res) => {
@@ -97,6 +99,7 @@ router.post(
   }
 );
 
+// set all features in namespace
 router.post("/:environmentName/namespace/:namespaceName/", (req, res) => {
   // remember that we model namespaces as features with subfeatures
   const { environmentName, namespaceName: featureName } = req.params;
