@@ -70,7 +70,7 @@ router.post(
           environment.featureValues[feature.name] || {};
         environment.featureValues[feature.name][entry] = !environment
           .featureValues[feature.name][entry];
-        const desc = environment.featureValues[feature.name]
+        const desc = environment.featureValues[feature.name][entry]
           ? "enabled"
           : "disabled";
         // mongoose doesn't detect changed subdoc
