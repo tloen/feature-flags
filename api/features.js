@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var { Feature } = require("../database/schemata");
+var { Feature, Log } = require("../database/schemata");
 
 router.post("/", (req, res) => {
   const updateAndSend = function(feature) {
@@ -30,6 +30,13 @@ router.post("/", (req, res) => {
       }
     );
   } else {
+    new Log({
+      flag: name,
+      environment: null,
+      user: req.ip,
+      info: "created", // what happened?
+      date: new Date()
+    }).save();
     updateAndSend(
       new Feature({
         name,

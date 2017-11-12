@@ -1,0 +1,13 @@
+html
+  head
+    title="Main page"
+    style
+      | * {font-family: "Helvetica", Arial, Times New Roman}
+  body
+    h1 Environment: #{environment.name}
+    h2 Flag: #{feature.name}
+    a(href='/app/'+environment.name) Return to environment page
+    h2 Changes:
+    ul
+      each log in logs
+        li=`${log.info}: by ${log.user} at ${log.date}`

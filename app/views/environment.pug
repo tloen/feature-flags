@@ -5,13 +5,15 @@ html
       | * {font-family: "Helvetica", Arial, Times New Roman}
   body
     h1 Environment: #{environment.name}
+    p Click the name of a feature to view its history.
     a(href='/app') Return to main page
     h2 Features:
     ul
       each feature in features
         if feature.type == 'atomic'
-          li #{feature.name}:#{' '}
-            | [#{enabled[feature.name] ? 'ENABLED' : 'DISABLED'}]
+          li
+            a(href=`/app/${environment.name}/feature/${feature.name}`) #{feature.name}:#{' '}
+              | [#{enabled[feature.name] ? 'ENABLED' : 'DISABLED'}]
             form(
               method='post'
               action=`/api/environments/${environment.name}/feature/${feature.name}`

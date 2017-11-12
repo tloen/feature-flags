@@ -9,6 +9,9 @@ connectDatabase();
 
 const port = 3000;
 
+// used for logging IPs
+app.enable("trust proxy");
+
 function logger(req, res, next) {
   console.log(new Date(), req.method, req.url);
   next();

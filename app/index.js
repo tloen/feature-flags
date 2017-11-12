@@ -1,7 +1,7 @@
 var express = require("express");
 
 // sub-applciation allows use of templating engine
-var router = express();
+var router = express({ mergeParams: true });
 var { Feature, Environment } = require("../database/schemata");
 
 // initial generation of environments
@@ -14,12 +14,11 @@ for (x of ["development", "integration", "staging", "production"]) {
 }
 */
 
-const envPage = require("./environment");
-
 router.set("view engine", "pug");
 router.set("views", "app/views");
+const envPage = require("./environment");
 
-router.get("/:environment", envPage);
+router.use("/:environment", envPage);
 
 router.get("/", (req, res) => {
   Promise.all([Environment.getNames(), Feature.getAll()]).then(

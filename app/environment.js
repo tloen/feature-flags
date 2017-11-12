@@ -2,9 +2,28 @@ var express = require("express");
 // accept environment param from above
 var router = express.Router({ mergeParams: true });
 const _ = require("lodash");
-const { Environment, Feature } = require("../database/schemata");
+const { Environment, Feature, Log } = require("../database/schemata");
 
-router.get("/:environment", (req, res) => {
+router.get("/feature/:feature", (req, res) => {
+  const { environment: environmentName, feature: featureName } = req.params;
+  Promise.all([
+    Environment.findByName(environmentName),
+    Feature.findByName(featureName),
+    Log.findForFlag(featureName)
+  ]).then(
+    ([environment, feature, logs]) => {
+      if (!environment || !feature) {
+        return res.send("error: environment or feature does not exist");
+      }
+      return res.render("flag", { environment, feature, logs });
+    },
+    err => {
+      res.send("server error");
+    }
+  );
+});
+
+router.get("/", (req, res) => {
   const { environment: environmentName } = req.params;
   Promise.all([Environment.findByName(environmentName), Feature.getAll()]).then(
     ([environment, features]) => {

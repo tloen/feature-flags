@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 
-var { Environment, Feature } = require("../database/schemata");
+var { Environment, Feature, Log } = require("../database/schemata");
 
 router.post("/:environmentName/feature/:featureName", (req, res) => {
   const { environmentName, featureName } = req.params;
@@ -17,8 +17,19 @@ router.post("/:environmentName/feature/:featureName", (req, res) => {
       environment.featureValues[feature.name] = !environment.featureValues[
         feature.name
       ];
+
+      const desc = environment.featureValues[feature.name]
+        ? "enabled"
+        : "disabled";
       // mongoose doesn't detect changed subdoc
       environment.markModified("featureValues");
+      new Log({
+        flag: feature.name,
+        environment: environment.name,
+        user: req.ip,
+        info: desc,
+        date: new Date()
+      }).save();
       environment.save().then(
         () => {
           res.redirect("back");
@@ -57,10 +68,19 @@ router.post(
           environment.featureValues[feature.name] || {};
         environment.featureValues[feature.name][entry] = !environment
           .featureValues[feature.name][entry];
-
+        const desc = environment.featureValues[feature.name]
+          ? "enabled"
+          : "disabled";
         // mongoose doesn't detect changed subdoc
         environment.markModified("featureValues");
         environment.markModified("featureValues." + feature.name);
+        new Log({
+          flag: namespace.name + "." + feature.name,
+          environment: environment.name,
+          user: req.ip,
+          info: desc,
+          date: new Date()
+        }).save();
         environment.save().then(
           () => {
             res.redirect("back");
@@ -91,12 +111,24 @@ router.post("/:environmentName/namespace/:namespaceName/", (req, res) => {
         return res.send("environment or namespace does not exist");
       }
       environment.featureValues = environment.featureValues || {};
+      // set all to true
       environment.featureValues[feature.name] = Object.assign(
         ...feature.entries.map(entry => ({
           [entry]: enable
         }))
       );
-
+      const desc = environment.featureValues[feature.name]
+        ? "enabled with namespace"
+        : "disabled with namespace";
+      for (flag of feature.entries) {
+        new Log({
+          flag: namespace.name + "." + flag,
+          environment: environment.name,
+          user: req.ip,
+          info: desc,
+          date: new Date()
+        }).save();
+      }
       // mongoose doesn't detect changed subdoc
       environment.markModified("featureValues");
       environment.markModified("featureValues." + feature.name);
