@@ -14,6 +14,7 @@ router.post("/", (req, res) => {
     );
   };
   const { featureName: name, namespace } = req.body;
+  if (name.includes(".")) return res.send("name cannot include a period.");
   if (namespace) {
     Feature.findByName(namespace).then(
       feature => {

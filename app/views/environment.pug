@@ -1,0 +1,26 @@
+html
+  head
+    title="Main page"
+    style
+      | * {font-family: "Helvetica", Arial, Times New Roman}
+  body
+    h1 Environment: #{environment.name}
+    a(href='/app') Return to main page
+    h2 Features:
+    ul
+      each feature in features
+        if feature.type == 'atomic'          
+          li #{feature.name}: 
+            | [#{enabled[feature.name] ? 'ENABLED' : 'DISABLED'}]
+            form(
+              method='post' 
+              action=`/api/environments/${environment.name}/feature/${feature.name}`
+            )
+              input(type='submit' value='Toggle enabled/disabled')
+        else if feature.type == 'namespace'
+          li='NAMESPACE: '+feature.name
+            ul
+              each entry in feature.entries
+                li #{entry}: 
+                  | [#{enabled[feature.name][entry] ? 'ENABLED' : 'DISABLED'}]
+                  

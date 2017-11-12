@@ -4,7 +4,7 @@ var { Feature } = require("../database/schemata");
 
 router.post("/", (req, res) => {
   const { namespaceName: name } = req.body;
-  console.log(name);
+  if (name.includes(".")) return res.send("name cannot include a period.");
   new Feature({
     name,
     type: "namespace",
