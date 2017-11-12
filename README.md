@@ -12,11 +12,14 @@ To simplify the visual design further, I'm going to segment the environments so 
     + add feature: HTML form (textbox)
     + add namespace: HTML form (textbox)
     + add feature to existing namespace: HTML form (textbox + dropdown)
-* /app/NAME_OF_ENVIRONMENT - the environment page
+* /app/environment/NAME_OF_ENVIRONMENT - the environment page
     + HTML list of features/namespaces
         - Feature in a namespace is a sub-item of the namespace
     + Each feature displays whether it is enabled, as well as an ENABLE or DISABLE button
     + Namespaces also have ENABLE ALL/DISABLE ALL buttons
+* /app/environment/NAME_OF_ENVIRONMENT/feature/FEATURE - the flag history page
+    + HTML list of changes in flag
+    + Use IP address instead of user
     
 These HTML files will be dynamically rendered upon request using the Pug templating engine and populated with data from a database query.
 
@@ -29,11 +32,16 @@ The following API endpoints would exist if I were rendering the page client-side
 * GET /api/environments - will return all environment names
 * GET /api/environments/ENVIRONMENT_ID/ - will return all features of a given environment
 
-The following endpoints still need to exist:
-* POST /api/features/FEATURE_NAME - creates feature.
-* POST /api/namespaces/NAMESPACE_NAME - creates namespace with given name.
-* POST /api/namespaces/NAMESPACE_NAME/features/FEATURE_NAME - creates feature within namespace.
-* PUT /api/features/FEATURE_NAME/environment/ENVIRONMENT_NAME - toggles feature with name. Has issues. Change as soon as possible.
+The following endpoints do, however, exist:
+* POST /api/features - creates feature.
+* POST /api/namespaces - creates namespace.
+* POST /api/features/namespace - creates feature within namespace.
+* POST /api/environment/ENVIRONMENT_NAME/feature/FEATURE_NAME - toggles single feature.
+* POST /api/environment/ENVIRONMENT_NAME/namespace/NAMESPACE_NAME/feature/FEATURE_NAME - toggles feature in namespace.
+* POST /api/environment/ENVIRONMENT_NAME/namespace/NAMESPACE_NAME - sets all features in namespace.
+
+
+/FEATURE_NAME/environment/ENVIRONMENT_NAME - toggles feature with name. Has issues. Change as soon as possible.
 
 The response from both of these endpoints should be a 200 and a refreshing of the client.
 
@@ -41,3 +49,6 @@ The response from both of these endpoints should be a 200 and a refreshing of th
 
 I have a strong sense that relational databases are the best tool for this data, as there's no doubt that it's heavily relational. However, my SQL's a bit rusty, so I'll go with MongoDB and (regrettably) sacrifice model simplicity for development speed.
 
+## Known bugs that I won't fix
+
+Don't make a namespace called `(none)`.
