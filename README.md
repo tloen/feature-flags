@@ -49,6 +49,8 @@ The response from both of these endpoints should be a 200 and a refreshing of th
 
 I have a strong sense that relational databases are the best tool for this data, as there's no doubt that it's heavily relational. However, my SQL's a bit rusty, so I'll go with MongoDB and (regrettably) sacrifice model simplicity for development speed.
 
+I use three collections---`logs`, `features`, and `environments`---to store my data. `environments` contains the configuration of each environment with respect to the master list of features in `features`. I also model namespaces as features with a set of subfeatures as embedded MongoDB documents.
+
 ## Known bugs that I won't fix right now
 
 Don't make a namespace called `(none)`.
