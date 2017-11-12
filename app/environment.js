@@ -4,12 +4,45 @@ var router = express.Router({ mergeParams: true });
 const _ = require("lodash");
 const { Environment, Feature, Log } = require("../database/schemata");
 
+router.get("/namespace/:namespace/feature/:feature", (req, res) => {
+  const {
+    environment: environmentName,
+    namespace: featureName,
+    feature: entry
+  } = req.params;
+  Promise.all([
+    Environment.findByName(environmentName),
+    Feature.findByName(featureName),
+    Log.findByFlagAndEnv(featureName + "." + entry, environmentName)
+  ]).then(
+    ([environment, feature, logs]) => {
+      if (!environment || !feature) {
+        return res.send("error: environment or feature does not exist");
+      }
+      console.log({
+        environment,
+        entry: featureName + "." + entry,
+        logs
+      });
+      return res.render("flag", {
+        environment,
+        entry: featureName + "." + entry,
+        feature: null,
+        logs
+      });
+    },
+    err => {
+      res.send("server error");
+    }
+  );
+});
+
 router.get("/feature/:feature", (req, res) => {
   const { environment: environmentName, feature: featureName } = req.params;
   Promise.all([
     Environment.findByName(environmentName),
     Feature.findByName(featureName),
-    Log.findForFlag(featureName)
+    Log.findByFlagAndEnv(featureName, environmentName)
   ]).then(
     ([environment, feature, logs]) => {
       if (!environment || !feature) {

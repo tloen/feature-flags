@@ -36,9 +36,11 @@ const logSchema = new Schema({
   }
 });
 
-logSchema.statics.findForFlag = function(flag) {
+logSchema.statics.findByFlagAndEnv = function(flag, environment) {
   // null is required for cross-environment events
-  return this.find({ flag: { $in: [flag, null] } }).sort({ date: -1 });
+  return this.find({ flag, environment: { $in: [environment, null] } }).sort({
+    date: -1
+  });
 };
 
 featureSchema.statics.findByName = function(name) {

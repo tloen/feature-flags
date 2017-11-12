@@ -4,7 +4,7 @@ var { Feature, Log } = require("../database/schemata");
 
 router.post("/", (req, res) => {
   const updateAndSend = function(feature) {
-    feature.save().then(
+    return feature.save().then(
       () => {
         return res.redirect("back");
       },
@@ -15,7 +15,8 @@ router.post("/", (req, res) => {
   };
   const { featureName: name, namespace } = req.body;
   if (name.includes(".")) return res.send("name cannot include a period.");
-  if (namespace) {
+  console.log(namespace);
+  if (namespace != "(none)") {
     Feature.findByName(namespace).then(
       feature => {
         if (!feature) {
@@ -23,26 +24,35 @@ router.post("/", (req, res) => {
         }
         // add name to namespace
         feature.entries = [...(feature.entries || []), name];
-        updateAndSend(feature);
+        updateAndSend(feature).then(() => {
+          new Log({
+            flag: namespace + "." + featureName,
+            environment: null,
+            user: req.ip,
+            info: "created", // what happened?
+            date: new Date()
+          }).save();
+        });
       },
       err => {
         return res.send(err);
       }
     );
   } else {
-    new Log({
-      flag: name,
-      environment: null,
-      user: req.ip,
-      info: "created", // what happened?
-      date: new Date()
-    }).save();
     updateAndSend(
       new Feature({
         name,
         type: "atomic"
       })
-    );
+    ).then(() => {
+      new Log({
+        flag: name,
+        environment: null,
+        user: req.ip,
+        info: "created", // what happened?
+        date: new Date()
+      }).save();
+    });
   }
 });
 

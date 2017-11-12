@@ -18,7 +18,7 @@ router.set("view engine", "pug");
 router.set("views", "app/views");
 const envPage = require("./environment");
 
-router.use("/:environment", envPage);
+router.use("/environment/:environment", envPage);
 
 router.get("/", (req, res) => {
   Promise.all([Environment.getNames(), Feature.getAll()]).then(

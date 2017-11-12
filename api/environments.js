@@ -75,7 +75,7 @@ router.post(
         environment.markModified("featureValues");
         environment.markModified("featureValues." + feature.name);
         new Log({
-          flag: namespace.name + "." + feature.name,
+          flag: feature.name + "." + entry,
           environment: environment.name,
           user: req.ip,
           info: desc,
@@ -117,12 +117,12 @@ router.post("/:environmentName/namespace/:namespaceName/", (req, res) => {
           [entry]: enable
         }))
       );
-      const desc = environment.featureValues[feature.name]
+      const desc = environment.featureValues[feature.name][entry]
         ? "enabled with namespace"
         : "disabled with namespace";
       for (flag of feature.entries) {
         new Log({
-          flag: namespace.name + "." + flag,
+          flag: feature.name + "." + flag,
           environment: environment.name,
           user: req.ip,
           info: desc,

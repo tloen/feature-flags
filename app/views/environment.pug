@@ -12,7 +12,7 @@ html
       each feature in features
         if feature.type == 'atomic'
           li
-            a(href=`/app/${environment.name}/feature/${feature.name}`) #{feature.name}:#{' '}
+            a(href=`/app/environment/${environment.name}/feature/${feature.name}`) #{feature.name}:#{' '}
               | [#{enabled[feature.name] ? 'ENABLED' : 'DISABLED'}]
             form(
               method='post'
@@ -30,7 +30,7 @@ html
               input(type='submit' name='action' value='Disable All')
             ul
               each entry in feature.entries
-                li #{entry}:#{' '}
+                a(href=`/app/environment/${environment.name}/namespace/${feature.name}/feature/${entry}`) #{entry}:#{' '}
                   | [#{enabled[feature.name][entry] ? 'ENABLED' : 'DISABLED'}]
                   form(
                     method='post'

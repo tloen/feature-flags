@@ -26,5 +26,9 @@ app.use("/app", frontend, (req, res) => {
   console.log("handled app request");
 });
 
+app.get("/", (req, res) => {
+  return res.redirect("/app");
+});
+
 app.listen(process.env.PORT || port);
 console.log("Listening on port " + port);

@@ -5,8 +5,11 @@ html
       | * {font-family: "Helvetica", Arial, Times New Roman}
   body
     h1 Environment: #{environment.name}
-    h2 Flag: #{feature.name}
-    a(href='/app/'+environment.name) Return to environment page
+    p
+      | We use the IP address as a stand-in for the user,
+      | because we don't want to implement authentication logic.
+    h2 Flag: #{feature ? feature.name : entry}
+    a(href='/app/environment/'+environment.name) Return to environment page
     h2 Changes:
     ul
       each log in logs
