@@ -26,7 +26,7 @@ router.get("/:environment", (req, res) => {
           }
         }
       }
-      return res.render("environment", { environment, features, enabled });
+      return res.render("environment", { environment, features, enabled, _ });
     },
     err => {
       res.send("server error");

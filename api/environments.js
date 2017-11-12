@@ -77,4 +77,42 @@ router.post(
   }
 );
 
+router.post("/:environmentName/namespace/:namespaceName/", (req, res) => {
+  // remember that we model namespaces as features with subfeatures
+  const { environmentName, namespaceName: featureName } = req.params;
+  const { action } = req.body;
+  const enable = action == "Enable All";
+  Promise.all([
+    Environment.findByName(environmentName),
+    Feature.findByName(featureName)
+  ]).then(
+    ([environment, feature]) => {
+      if (!environment || !feature || feature.type != "namespace") {
+        return res.send("environment or namespace does not exist");
+      }
+      environment.featureValues = environment.featureValues || {};
+      environment.featureValues[feature.name] = Object.assign(
+        ...feature.entries.map(entry => ({
+          [entry]: enable
+        }))
+      );
+
+      // mongoose doesn't detect changed subdoc
+      environment.markModified("featureValues");
+      environment.markModified("featureValues." + feature.name);
+      environment.save().then(
+        () => {
+          res.redirect("back");
+        },
+        err => {
+          res.send(err);
+        }
+      );
+    },
+    err => {
+      return res.send("database lookup error");
+    }
+  );
+});
+
 module.exports = router;
